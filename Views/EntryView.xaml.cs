@@ -25,5 +25,19 @@ namespace CoinParkingSystem.Views
            
             InitializeComponent();
         }
+        private void SlotButton_Click(object sender, RoutedEventArgs e)
+        { 
+            foreach (var child in SlotGrid.Children)
+            {
+
+                if (child is Button btn)
+                {
+                    btn.BorderBrush = Brushes.LimeGreen;
+                }
+            }
+            Button clickedButton = sender as Button;
+            clickedButton.BorderBrush = Brushes.Red;
+        }
+
     }
 }
