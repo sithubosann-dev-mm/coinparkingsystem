@@ -10,17 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace CoinParkingSystem.Views
 {
     /// <summary>
-    /// EntryView.xaml の相互作用ロジック
+    /// Interaction logic for EntryView.xaml
     /// </summary>
     public partial class EntryView : Window
     {
         public EntryView()
         {
+           
             InitializeComponent();
         }
     }

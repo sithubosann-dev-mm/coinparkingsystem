@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:CoinParkingSystem"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+    
+    
     <Grid>
-        <Button></Button>
-        
+       
+
     </Grid>
 </Window>

@@ -6,48 +6,28 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using CoinParkingSystem.Services;
 using CoinParkingSystem.Commands;
+using CoinParkingSystem.Models;
+using System.Collections.ObjectModel;
 
 namespace CoinParkingSystem.ViewModels
 {
-    public class ExitViewModel: BaseViewModel
 
-
-           {
-
+    public class ExitViewModel : BaseViewModel
+    {
         private readonly MainNavigationViewModel _mainNav;
+        public ObservableCollection<ParkingSlot> ParkingSlots { get; set; }
 
-        // Constructor မှာ ရထားခေါင်းကြီးကို လှမ်းချိတ်ဖို့ သတ်မှတ်ချက်
-        public ExitViewModel(MainNavigationViewModel mainNav)
+        
+        public ExitViewModel()
+        {
+        }
+
+        public ExitViewModel(MainNavigationViewModel mainNav, ObservableCollection<ParkingSlot> sharedSlots = null)
         {
             _mainNav = mainNav;
+            ParkingSlots = sharedSlots;
         }
 
-
-
-        private ReceiptService _receiptService = new ReceiptService();
-
-        public ICommand PaymentCommand { get; }
-
-
-        public ExitViewModel() { 
-
-            PaymentCommand = new RelayCommand(OnPaymentConfirmed);
-        }
-
-        public void OnPaymentConfirmed(object parameter) {
-
-            // mock example >> for testing to release receipt text file. diki
-            string currentPlate = "Osaka 300 A 1234";
-            decimal totalFee = 500;
-
-            // for customer_receipt.diki
-            _receiptService.GenerateCustomerReceipt(currentPlate, totalFee);
-
-            // for owner.diki
-            _receiptService.SaveDailyIncome(totalFee);
-
-            System.Windows.MessageBox.Show("ありがとうございます。お支払い完了しました。");
-        }
-
+        
     }
 }
