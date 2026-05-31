@@ -4,12 +4,30 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CoinParkingSystem"
+        
+        xmlns:viewmodels="clr-namespace:CoinParkingSystem.ViewModels"
+        xmlns:views="clr-namespace:CoinParkingSystem.Views"
+        
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    
-    
-    <Grid>
-       
+        Title="Coin Parking System" Height="650" Width="1000"
+        WindowStartupLocation="CenterScreen">
 
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type viewmodels:MainViewModel}">
+            <views:MainView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:EntryViewModel}">
+            <views:EntryView />
+        </DataTemplate>
+
+        <DataTemplate DataType="{x:Type viewmodels:ExitViewModel}">
+            <views:ExitView />
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
+
 </Window>
