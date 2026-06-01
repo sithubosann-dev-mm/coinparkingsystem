@@ -9,7 +9,11 @@
         xmlns:views="clr-namespace:CoinParkingSystem.Views"
         
         mc:Ignorable="d"
-        Title="Coin Parking System" Height="650" Width="1000"
+        Title="Coin Parking System" 
+        
+        Width="1000" 
+        Height="650"
+        ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
@@ -29,5 +33,4 @@
     <Grid>
         <ContentControl Content="{Binding CurrentViewModel}" />
     </Grid>
-
 </Window>

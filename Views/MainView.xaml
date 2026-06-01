@@ -3,40 +3,131 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:CoinParkingSystem.Views"
              mc:Ignorable="d"
-             Height="450" Width="800"
-             Background="#222222">
+             
+        
+    Width="1000" Height="650"
+             Background="#1C1C1C">
 
     <Grid>
-        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="460"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
 
-            <TextBlock Text="Mem2(Dashboard)" 
-                       Foreground="White" 
-                       FontSize="28" 
-                       Margin="0,0,0,30"
-                       HorizontalAlignment="Center"/>
+        <!-- TOP HEADER -->
+        <Border Grid.Row="0" Background="#111111" BorderBrush="#FFA500" BorderThickness="0,0,0,4">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border Width="55" Height="55" BorderBrush="#FFA500" BorderThickness="3" CornerRadius="28" Margin="0,0,15,0">
+                    <TextBlock Text="P" Foreground="#FFA500" FontSize="32" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </Border>
+                <TextBlock Text="COIN PARKING" Foreground="#FFA500" FontSize="34" FontWeight="Black" VerticalAlignment="Center"/>
+            </StackPanel>
+        </Border>
 
-            <Button Content="車両入庫 (Entry View)" 
-                    Command="{Binding DataContext.MapsToEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                    Width="250" Height="60" 
-                    Background="DarkGreen" Foreground="White" 
-                    FontSize="18" FontWeight="Bold"
-                    Cursor="Hand">
-                <Button.Resources>
+        <!-- MAIN CONTENT AREA -->
+        <Grid Grid.Row="1" Margin="45">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- MINI MAP -->
+            <Border Grid.Column="0" Background="#2D2D2D" BorderBrush="#FFCC00" BorderThickness="4" CornerRadius="15" Margin="20" Padding="18">
+                <StackPanel>
+                    <TextBlock Text="PARKING MAP" Foreground="#FFA500" FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+
+                    <!-- Real-time Mini Map List -->
+                    <ItemsControl ItemsSource="{Binding ParkingSlots}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <UniformGrid Rows="3" Columns="5"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Width="55" Height="55" Margin="5" CornerRadius="6" BorderThickness="3">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="BorderBrush" Value="#FFCC00"/>
+                                            <Setter Property="Background" Value="#202020"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsOccupied}" Value="True">
+                                                    <Setter Property="BorderBrush" Value="#FF3B30"/>
+                                                    <Setter Property="Background" Value="#3A2222"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+                                    <TextBlock Text="{Binding SlotNumber}" Foreground="#FFA500" FontSize="18" FontWeight="Black" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+
+                    <!-- Available / 満車 Text -->
+                    <TextBlock HorizontalAlignment="Center" Margin="0,16,0,0" Foreground="White" FontSize="22" FontWeight="Bold">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Text" Value="{Binding AvailableSlotsCount, StringFormat=Available: {0}}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding AvailableSlotsCount}" Value="0">
+                                        <Setter Property="Text" Value="満車"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+     
+            <StackPanel Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+             
+                <StackPanel.Resources>
                     <Style TargetType="Button">
+                        <Setter Property="Width" Value="330"/>
+                        <Setter Property="Height" Value="80"/>
+                        <Setter Property="FontSize" Value="22"/>
+                        <Setter Property="FontWeight" Value="Bold"/>
+                        <Setter Property="Foreground" Value="White"/>
+                        <Setter Property="BorderBrush" Value="#FFA500"/>
+                        <Setter Property="BorderThickness" Value="3"/>
+                        <Setter Property="Cursor" Value="Hand"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}" CornerRadius="10">
+                            
+                                    <Border Background="{TemplateBinding Background}" 
+                                            BorderBrush="{TemplateBinding BorderBrush}" 
+                                            BorderThickness="{TemplateBinding BorderThickness}" 
+                                            CornerRadius="6">
                                         <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Setter.Value>
                         </Setter>
                     </Style>
-                </Button.Resources>
-            </Button>
+                </StackPanel.Resources>
 
-        </StackPanel>
+             
+                <Button Content="車両入庫 / ENTRY"
+                        Background="#0F5132"
+                        Command="{Binding DataContext.MapsToEntryCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+
+          
+                <Button Content="車両出庫 / EXIT"
+                        Background="#842029"
+                        Margin="0,30,0,0"
+                        Command="{Binding DataContext.MapsToExitCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
+            </StackPanel>
+        </Grid>
+
+        <!-- FOOTER -->
+        <TextBlock Grid.Row="2" Text="コインパーキング管理システム" Foreground="#888888" FontSize="18" HorizontalAlignment="Center" VerticalAlignment="Center"/>
     </Grid>
 </UserControl>

@@ -47,12 +47,12 @@ namespace CoinParkingSystem.ViewModels
 
             if (SelectedSlot.IsOccupied)
             {
-                MessageBox.Show($"Slot{slotNumber}は既に満車です。", "確認", MessageBoxButton.OK, MessageBoxImage.Warning);
+                MessageBox.Show($"パーキング{slotNumber}は既に満車です。", "確認", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
             var result = MessageBox.Show(
-                $"Slot{slotNumber}を登録しますか?",
+                $"パーキング{slotNumber}を登録しますか?",
                 "確認",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question
@@ -73,7 +73,7 @@ namespace CoinParkingSystem.ViewModels
             SelectedSlot.EntryTime = DateTime.Now;
 
             MessageBox.Show(
-                $"Slot{SelectedSlot.SlotNumber}が登録されました。",
+                $"パーキング{SelectedSlot.SlotNumber}が登録されました。",
                 "完了",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information
