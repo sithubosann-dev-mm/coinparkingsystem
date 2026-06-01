@@ -1,78 +1,48 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using CoinParkingSystem.Commands; // 
 using CoinParkingSystem.Models;
 
 namespace CoinParkingSystem.ViewModels
 {
     public class MainNavigationViewModel : BaseViewModel
     {
+        private object _currentView;
+        private object _navigationService; // Team အဖွဲ့ဝင်များ သုံးထားသော Service Parameter
 
-        // စနစ်မှာ Screen တစ်ခုကနေတစ်ခု ကူးပြောင်းတိုင်း (ဥပမာ- Entry ကနေ Main ပြန်သွားတိုင်း) ပါကင်အချက်အလက်တွေ ရိုးရိုးကြီး Reset ဖြစ်ပြီး ပျောက်မသွားစေဖို့အတွက်
-
-        //MainNavigationViewModel ထဲမှာ SharedParkingSlots  ကို တစ်ခုတည်း ကြိုဆောက်ထားပြီး၊  Mem 2 (Dashboard)၊ Mem 3 (entry)၊ Member 4 (exit) တို့ဆီကို Dependency Injection (ပါရာမီတာဖြင့် ပေးပို့ခြင်း) စနစ်နဲ့ shareထားပါတယ်။
-
-        //ဒါကြောင့် တစ်ယောက်က ပြင်လိုက်တဲ့ Real Data ကို အားလုံးက တပြိုင်နက်တည်း မှန်မှန်ကန်ကန် မြင်တွေ့နေရတာ ဖြစ်ပါတယ်
         public ObservableCollection<ParkingSlot> SharedParkingSlots { get; set; }
 
-        private BaseViewModel _currentViewModel;
-        public BaseViewModel CurrentViewModel
+        public object CurrentView
         {
-            get => _currentViewModel;
-            set
-            {
-                _currentViewModel = value;
-                OnPropertyChanged(nameof(CurrentViewModel));
-            }
+            get => _currentView;
+            set { _currentView = value; OnPropertyChanged(); }
         }
-
-        // XAML ခလုတ်များမှ လှမ်းခေါ်မည့် ပင်မ Commands များ
-        public ICommand MapsToMainCommand { get; }
-        public ICommand MapsToEntryCommand { get; }
-        public ICommand MapsToExitCommand { get; }
 
         public MainNavigationViewModel()
         {
             SharedParkingSlots = new ObservableCollection<ParkingSlot>();
             for (int i = 1; i <= 15; i++)
             {
-                SharedParkingSlots.Add(new ParkingSlot
-                {
-                    SlotNumber = i,
-                    IsOccupied = false
-                });
+                SharedParkingSlots.Add(new ParkingSlot { SlotNumber = i, IsOccupied = false });
             }
 
-            // command readdy when button click
-            MapsToMainCommand = new RelayCommand(_ => MapsToMain());
-            MapsToEntryCommand = new RelayCommand(_ => MapsToEntry());
-            MapsToExitCommand = new RelayCommand(_ => MapsToExit());
+            _navigationService = new object();
 
-        
-            MapsToMain();
+            NavigateToMain();
         }
 
-        // for mem2 (Dashboard)
-        public void MapsToMain()
+        public void NavigateToMain()
         {
-            CurrentViewModel = new MainViewModel(this, SharedParkingSlots);
+            CurrentView = new MainViewModel(this, SharedParkingSlots);
         }
 
-        // for mem3 (Entry)
-        public void MapsToEntry()
+        public void NavigateToEntry()
         {
-            CurrentViewModel = new EntryViewModel(this, SharedParkingSlots);
+            CurrentView = new EntryViewModel(this, _navigationService, SharedParkingSlots);
         }
 
-        // for mem4 (Exit)
-        public void MapsToExit()
+        public void NavigateToExit()
         {
-            CurrentViewModel = new ExitViewModel(this, SharedParkingSlots);
+            CurrentView = new ExitViewModel(this, _navigationService, SharedParkingSlots);
         }
     }
 }

@@ -4,68 +4,82 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d"
-             
              Width="1000" Height="650"
              Background="#1C1C1C">
 
-    <Grid>
-        <UniformGrid x:Name="SlotGrid" 
-                     Rows="3" Columns="5" 
-                     HorizontalAlignment="Center" 
-                     VerticalAlignment="Center" 
-                     Margin="10">
+    <UserControl.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis"/>
 
+        <Style x:Key="InverseBooleanGridStyle" TargetType="UniformGrid">
+            <Setter Property="IsEnabled" Value="True"/>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsPopupVisible}" Value="True">
+                    <Setter Property="IsEnabled" Value="False"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="PlaceholderTextBoxStyle" TargetType="TextBox">
+            <Setter Property="Background" Value="#222222"/>
+            <Setter Property="Foreground" Value="#FFA500"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                            <Grid>
+                                <ScrollViewer x:Name="PART_ContentHost" Focusable="false" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden"/>
+                                <TextBlock x:Name="placeholderText" Text="{TemplateBinding Tag}" Foreground="#555555" Visibility="Collapsed" IsHitTestVisible="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Grid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="Text" Value="">
+                                <Setter TargetName="placeholderText" Value="Visible"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button Grid.Row="0" Content="◀ 戻る (Dashboard)" Command="{Binding DataContext.MapsToMainCommand, RelativeSource={RelativeSource AncestorType=Window}}" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,10,0,0" Width="180" Height="40" FontSize="15" FontWeight="Bold" Foreground="#FFA500" Background="#2D2D2D" BorderBrush="#FFCC00" BorderThickness="2" Cursor="Hand"/>
+
+        <UniformGrid Grid.Row="1" x:Name="SlotGrid" Rows="3" Columns="5" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0,10,20" Style="{StaticResource InverseBooleanGridStyle}">
             <UniformGrid.Resources>
                 <Style TargetType="Button">
                     <Setter Property="Background" Value="#2D2D2D"/>
                     <Setter Property="Foreground" Value="#FFA500"/>
                     <Setter Property="Margin" Value="12"/>
-
                     <Setter Property="Width" Value="150"/>
                     <Setter Property="Height" Value="150"/>
                     <Setter Property="Cursor" Value="Hand"/>
-
                     <Setter Property="BorderBrush" Value="#FFCC00"/>
                     <Setter Property="BorderThickness" Value="4"/>
-
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="Button">
-                                <Border Background="{TemplateBinding Background}" 
-                                        BorderBrush="{TemplateBinding BorderBrush}" 
-                                        BorderThickness="{TemplateBinding BorderThickness}" 
-                                        CornerRadius="2">
-
+                                <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="2">
                                     <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                                        <Border Width="40" Height="40" 
-                                                BorderBrush="{TemplateBinding Foreground}" 
-                                                BorderThickness="2.5" 
-                                                CornerRadius="20" 
-                                                Margin="0,0,0,4">
-                                            <TextBlock Text="P" FontSize="20" FontWeight="Bold" 
-                                                       Foreground="{TemplateBinding Foreground}"
-                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        <Border Width="40" Height="40" BorderBrush="{TemplateBinding Foreground}" BorderThickness="2.5" CornerRadius="20" Margin="0,0,0,4">
+                                            <TextBlock Text="P" FontSize="20" FontWeight="Bold" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                         </Border>
-
-                                        <TextBlock Text="コインパーキング" FontSize="10" 
-                                                   Foreground="{TemplateBinding Foreground}" 
-                                                   HorizontalAlignment="Center" Margin="0,2"/>
-
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <ContentPresenter.Resources>
-                                                <Style TargetType="TextBlock">
-                                                    <Setter Property="FontSize" Value="32"/>
-                                                    <Setter Property="FontWeight" Value="Black"/>
-                                                    <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=Foreground}"/>
-                                                </Style>
-                                            </ContentPresenter.Resources>
-                                        </ContentPresenter>
+                                        <TextBlock Text="コインパーキング" FontSize="10" Foreground="{TemplateBinding Foreground}" HorizontalAlignment="Center" Margin="0,2"/>
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </StackPanel>
                                 </Border>
                             </ControlTemplate>
                         </Setter.Value>
                     </Setter>
-
                     <Style.Triggers>
                         <DataTrigger Binding="{Binding IsOccupied}" Value="True">
                             <Setter Property="BorderBrush" Value="#FF3B30"/>
@@ -81,19 +95,53 @@
             <Button Content="3"  DataContext="{Binding ParkingSlots[2]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="3"/>
             <Button Content="4"  DataContext="{Binding ParkingSlots[3]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="4"/>
             <Button Content="5"  DataContext="{Binding ParkingSlots[4]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="5"/>
-
             <Button Content="6"  DataContext="{Binding ParkingSlots[5]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="6"/>
             <Button Content="7"  DataContext="{Binding ParkingSlots[6]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="7"/>
             <Button Content="8"  DataContext="{Binding ParkingSlots[7]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="8"/>
             <Button Content="9"  DataContext="{Binding ParkingSlots[8]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="9"/>
             <Button Content="10" DataContext="{Binding ParkingSlots[9]}"  Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="10"/>
-
             <Button Content="11" DataContext="{Binding ParkingSlots[10]}" Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="11"/>
             <Button Content="12" DataContext="{Binding ParkingSlots[11]}" Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="12"/>
             <Button Content="13" DataContext="{Binding ParkingSlots[12]}" Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="13"/>
             <Button Content="14" DataContext="{Binding ParkingSlots[13]}" Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="14"/>
             <Button Content="15" DataContext="{Binding ParkingSlots[14]}" Command="{Binding DataContext.SelectSlotCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="15"/>
-
         </UniformGrid>
+
+        <Grid Grid.Row="0" Grid.RowSpan="2" Background="#B3000000" Visibility="{Binding IsPopupVisible, Converter={StaticResource BoolToVis}}">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <TextBlock Text="{Binding PopupTitle}" Foreground="#FFA500" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,15"/>
+                <Border Width="460" Height="260" Background="#111111" BorderBrush="#FFA500" BorderThickness="4" CornerRadius="15" Padding="20">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0" Margin="20,5,20,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding InputPlateRegion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource PlaceholderTextBoxStyle}" Tag="地名" FontSize="26" Width="130" HorizontalAlignment="Left" MaxLength="3"/>
+                            <TextBox Grid.Column="1" Text="{Binding InputPlateSecret, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource PlaceholderTextBoxStyle}" Tag="分類番号" FontSize="26" Width="130" HorizontalAlignment="Right" MaxLength="3"/>
+                        </Grid>
+                        <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBox x:Name="TxtCarNoPart1" Text="{Binding CarNoPart1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource PlaceholderTextBoxStyle}" Tag="00" FontSize="55" Width="110" Height="85" MaxLength="2"/>
+                                <TextBlock Text="-" Foreground="#FFA500" FontSize="55" FontWeight="Black" VerticalAlignment="Center" Margin="10,0"/>
+                                <TextBox x:Name="TxtCarNoPart2" Text="{Binding CarNoPart2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource PlaceholderTextBoxStyle}" Tag="00" FontSize="55" Width="110" Height="85" MaxLength="2"/>
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+                <Grid Width="460" Margin="0,20,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0" Content="キャンセル" Command="{Binding CancelCommand}" Height="48" Margin="5" Foreground="White" Background="#444444" BorderThickness="0" FontSize="16" FontWeight="Bold" Cursor="Hand"/>
+                    <Button Grid.Column="1" Content="確定 / CONFIRM" Command="{Binding ConfirmCommand}" Height="48" Margin="5" Foreground="White" Background="#0F5132" BorderThickness="0" FontSize="16" FontWeight="Bold" Cursor="Hand"/>
+                </Grid>
+            </StackPanel>
+        </Grid>
     </Grid>
 </UserControl>
