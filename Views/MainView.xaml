@@ -42,6 +42,7 @@
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
+        <!-- TOP HEADER -->
         <Border Grid.Row="0" Background="#111111" BorderBrush="#FFA500" BorderThickness="0,0,0,4">
             <Grid>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="30,0,0,0">

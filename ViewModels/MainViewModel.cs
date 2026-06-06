@@ -9,8 +9,10 @@ using CoinParkingSystem.Models;
 
 namespace CoinParkingSystem.ViewModels
 {
+    // [Dashboard (MainView) အတွက် 
     public class MainViewModel : BaseViewModel
     {
+        // Screen ကူးပြောင်းခြင်းများကို လှမ်း၍ အမိန့်ပေးနိုင်ရန် ဗဟို Navigation 
         private readonly MainNavigationViewModel _mainNav;
         private string _typedSlotNumber = string.Empty;
         private string _carPlateNumber = string.Empty;
