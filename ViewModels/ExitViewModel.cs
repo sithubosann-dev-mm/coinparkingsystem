@@ -157,21 +157,21 @@ namespace CoinParkingSystem.ViewModels
                 {
                     if (inserted >= ParkingFeeValue)
                     {
-                        PaymentResult = $"【 現金精算モード 】\n\n投入金額 : {inserted} 円\nお釣り (Change) : {inserted - ParkingFeeValue} 円\n\n「支払い」ボタンを押して精算を確定してください。";
+                        PaymentResult = $"投入金額 : {inserted} 円\nお釣り (Change) : {inserted - ParkingFeeValue} 円\n\n「支払い」ボタンを押して精算を確定してください。";
                     }
                     else
                     {
-                        PaymentResult = $"【 現金精算モード 】\n\n投入金額 : {inserted} 円\n不足金額 (Shortage) : {ParkingFeeValue - inserted} 円\n\nお金が不足しています。追加投入してください。";
+                        PaymentResult = $"投入金額 : {inserted} 円\n不足金額 (Shortage) : {ParkingFeeValue - inserted} 円\n\nお金が不足しています。追加投入してください。";
                     }
                 }
                 else
                 {
-                    PaymentResult = $"【 現金精算モード 】\n請求金額 : {FeeResultDisplay} 円\n\n下の入力欄に投入金額を入力してください。";
+                    PaymentResult = $"請求金額 : {FeeResultDisplay} 円\n\n下の入力欄に投入金額を入力してください。";
                 }
             }
             else
             {
-                PaymentResult = $"【 キャッシュレス決済 】\n\n決済方法 : {cleanMethodName}\n請求金額 : {FeeResultDisplay} 円\n\nお釣りはありません。「支払い」ボタンを押してください。";
+                PaymentResult = $"決済方法 : {cleanMethodName}\n請求金額 : {FeeResultDisplay} 円\n\nお釣りはありません。「支払い」ボタンを押してください。";
             }
         }
 
