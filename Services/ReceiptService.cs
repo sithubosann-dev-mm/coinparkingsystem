@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace CoinParkingSystem.Services
-{            // receipt service.diki
+{  
     public class ReceiptService
     {
         // Receipt can view in folder path in ur bin file >>bin/Debug/Data/....
@@ -29,10 +29,15 @@ namespace CoinParkingSystem.Services
         }
 
         // Owner Report.diki
-        public void SaveDailyIncome(decimal amount)
+        public void SaveDailyIncome(decimal amount, int parkingFeeValue)
         {
             string reportLine = $"{DateTime.Now.ToShortDateString()} | Income: ¥{amount}\n";
             File.AppendAllText(dailyOwnerReport, reportLine);
+        }
+
+        internal void GenerateCustomerReceipt(int slotNumber, int parkingFeeValue)
+        {
+            throw new NotImplementedException();
         }
     }
 
