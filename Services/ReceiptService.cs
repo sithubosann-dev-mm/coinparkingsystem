@@ -2,7 +2,7 @@
 using System.IO;
 
 namespace CoinParkingSystem.Services
-{            // receipt service.diki
+{  
     public class ReceiptService
     {
         // Receipt can view in folder path in ur bin file >>bin/Debug/Data/....

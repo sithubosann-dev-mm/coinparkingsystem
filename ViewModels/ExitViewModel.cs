@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using CoinParkingSystem.Commands;
@@ -11,6 +12,7 @@ namespace CoinParkingSystem.ViewModels
     {
         private readonly MainNavigationViewModel _mainNav;
         private readonly object _navService;
+        private readonly ReceiptService _receiptService;
 
         public ObservableCollection<ParkingSlot> SharedParkingSlots { get; set; }
 
@@ -107,6 +109,7 @@ namespace CoinParkingSystem.ViewModels
             _mainNav = mainNav;
             _navService = navService;
             SharedParkingSlots = sharedSlots;
+             _receiptService = new ReceiptService();
 
             CalculateFeeCommand = new RelayCommand(_ =>
             {
@@ -133,6 +136,15 @@ namespace CoinParkingSystem.ViewModels
 
                     int change = inserted - ParkingFeeValue;
                     MessageBox.Show($"{cleanMethodName} での精算が完了しました！\nお釣り: {change} 円\nご利用ありがとうございました！", "精算完了", MessageBoxButton.OK, MessageBoxImage.Information);
+                    try
+                    {
+                        _receiptService.GenerateCustomerReceipt(SelectedParkingSlot.SlotNumber, ParkingFeeValue);
+                        _receiptService.SaveDailyIncome(SelectedParkingSlot.SlotNumber, ParkingFeeValue);
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"レシートの保存中にエラーが発生しました: {ex.Message}", "レシートエラー", MessageBoxButton.OK, MessageBoxImage.Error);
+                    }
                 }
                 else
                 {
@@ -184,6 +196,6 @@ namespace CoinParkingSystem.ViewModels
         private void ReturnToMainDashboard()
         {
             if (_mainNav != null) _mainNav.CurrentView = new MainViewModel(_mainNav, SharedParkingSlots);
-        }
+        }     
     }
 }
